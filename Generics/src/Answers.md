@@ -44,3 +44,21 @@ T can represent any type, and not every type has an Id property.
 For example, string does not have an Id property.
 
 Therefore, the compiler cannot allow us to write item.Id.
+
+## Step 7
+
+### Why must Store<string> not compile?
+
+Store<T> has the constraint:
+
+where T : IHasId
+
+This means that T must implement IHasId.
+
+Student and Course implement IHasId, so they can be used with Store<T>.
+
+String does not implement IHasId, so Store<string> must not compile.
+
+## Final Question
+
+The common name for this kind of class is a Generic Repository.

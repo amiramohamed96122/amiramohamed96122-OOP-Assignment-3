@@ -5,38 +5,39 @@ public interface IHasId
 }
 public class Store<T> where T : IHasId
 {
-    private readonly List<T> items = new();
+    private readonly Dictionary<int, T> items = new();
 
     public void Add(T item)
     {
-        items.Add(item);
+        if (items.ContainsKey(item.Id))
+        {
+            throw new InvalidOperationException(
+                $"An item with Id {item.Id} already exists.");
+        }
+
+        items.Add(item.Id, item);
     }
 
     public T? GetById(int id)
     {
-        foreach (var item in items)
+
+        if (items.TryGetValue(id, out T? item))
         {
-            if (item.Id == id)
-            {
-                return item;
-            }
+            return item;
         }
 
         return default;
     }
 
-    public List<T> GetAll()
+    public IReadOnlyCollection<T> GetAll()
     {
-        return items;
+        return items.Values;
     }
 
     public void Remove(int id)
     {
-        T? item = GetById(id);
-
-        if (item != null)
-        {
-            items.Remove(item);
-        }
+       
+      items.Remove(id);
+        
     }
 }
